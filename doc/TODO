@@ -1,0 +1,3 @@
+- implement multiple sets in the datatype view/edit template - need to store the set on the attribute definition
+- have some warnings in debug output
+- hardcoded attribute name needed "view_extra"

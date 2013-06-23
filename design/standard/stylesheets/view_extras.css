@@ -1,0 +1,15 @@
+.ui-view-extras .ui-special-tag
+{
+	font-style: italic;
+}
+
+.ui-view-extras table td
+{
+	padding: 0px 7px;
+}
+
+.ui-view-extras thead td
+{
+	font-style: italic;
+	padding-bottom: 7px;
+}
