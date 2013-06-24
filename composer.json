@@ -8,7 +8,6 @@
             "name": "Philipp Kamps"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "ezsystems/ezpublish-legacy-installer": "*"
     }
