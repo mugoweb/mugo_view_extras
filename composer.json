@@ -1,0 +1,15 @@
+{
+    "name": "mugoweb/mugo_view_extras",
+    "description": "eZ Publish extension for managing view extras",
+    "type": "ezpublish-legacy-extension",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Philipp Kamps"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ezsystems/ezpublish-legacy-installer": "*"
+    }
+}
