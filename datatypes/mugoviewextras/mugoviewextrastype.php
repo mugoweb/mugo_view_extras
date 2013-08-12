@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @author pkamps
+ * TODO: consider to use the object ids instead of the node ids.
+ * 
+ */
 class MugoViewExtrasType extends eZDataType
 {
 
@@ -41,7 +46,7 @@ class MugoViewExtrasType extends eZDataType
 	function fetchObjectAttributeHTTPInput( $http, $base, $contentObjectAttribute )
 	{
 		$data = $_REQUEST[ $base . '_' . $contentObjectAttribute->attribute( 'id' ) . '_view_extra' ];
-    	$contentObjectAttribute->setAttribute( 'data_text', serialize( $data ) );
+		$contentObjectAttribute->setAttribute( 'data_text', serialize( $data ) );
 		return true;
 	}
 

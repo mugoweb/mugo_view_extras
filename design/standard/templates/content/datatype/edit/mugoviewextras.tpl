@@ -28,6 +28,7 @@
 			{/foreach}
 		</ul>
 
+		{def $configured_tag_fields = array()}
 		{foreach $tags as $tag_id => $tag_name}
 			<div id="tabs-{$tag_id|wash()}">
 				{if $fieldgroups|count()}
@@ -36,6 +37,7 @@
 							<legend>{$name|wash()}:</legend>
 
 							{set $field_ids = $fieldgroup|explode( ',' )}
+							{set $configured_tag_fields = array()}
 							
 							{if $field_ids|count()}
 								<table>
@@ -61,7 +63,36 @@
 												{/if}
 											</td>
 										</tr>
+										
+										{* ezp is so bad handling hashes - we need to keep track of shown fields in
+										   an extra variable and fileter by that.
+										*}
+										{set $configured_tag_fields = $configured_tag_fields|append( $field_id )}
 									{/foreach}
+
+									{* show unconfigured fields *}
+									{if ezini( 'MugoViewExtras', 'ShowUnkownFields', 'mugo_view_extras.ini' )|eq( 'enabled' )}
+										{foreach $content[ $tag_id ] as $field_id => $value}
+											{if $configured_tag_fields|contains( $field_id )|not()}
+												<tr class="unconfigured ui-state-error">
+													<td>{$field_id|wash()}:</td>
+													<td>
+														<input type="text"
+														       value="{$value|wash()}"
+														       name="{$input_prefix}view_extra[{$tag_id|wash()}][{$field_id|wash()}]"
+														 />
+														<input class="button" type="submit" name="CustomActionButton[{$attribute.id}_browse_related_node][{$tag_id|wash()}][{$field_id|wash()}]" value="{'Browse for node'|i18n( 'design/standard/content/datatype' )}" />
+														{if ne( '', $value )}
+															{set $selectedNode = fetch( 'content', 'node', hash( 'node_id', $field_value ) )}
+															{if $selectedNode}
+																Node name: {$selectedNode.name|wash()}
+															{/if}
+														{/if}
+													</td>
+												</tr>
+											{/if}
+										{/foreach}
+									{/if}
 								</table>
 							{/if}
 						</fieldset>

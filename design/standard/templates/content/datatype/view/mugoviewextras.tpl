@@ -2,13 +2,13 @@
   {def $attribute_base = 'ContentObjectAttribute'}
 {/if}
 
-{def $input_prefix = concat( $attribute_base, '_', $attribute.id, '_' )
-     $content      = $attribute.content
-     $tags         = ezini( 'Set-standard', 'Tags', 'mugo_view_extras.ini' )
-     $fields       = ezini( 'Set-standard', 'Fields', 'mugo_view_extras.ini' )
-     $fieldgroups  = ezini( 'Set-standard', 'FieldGroups', 'mugo_view_extras.ini' )
-     $view_extras  = fetch( 'mugo_view_extras', 'get', hash( 'node_id', $attribute.object.main_node_id ) )
-     $field_ids    = array()
+{def $input_prefix       = concat( $attribute_base, '_', $attribute.id, '_' )
+     $content            = $attribute.content
+     $tags               = ezini( 'Set-standard', 'Tags', 'mugo_view_extras.ini' )
+     $fields             = ezini( 'Set-standard', 'Fields', 'mugo_view_extras.ini' )
+     $fieldgroups        = ezini( 'Set-standard', 'FieldGroups', 'mugo_view_extras.ini' )
+     $view_extras        = fetch( 'mugo_view_extras', 'get', hash( 'node_id', $attribute.object.main_node_id ) )
+     $field_ids          = array()
 }
 
 {ezscript_require( 'ezjsc::jquery' )}
@@ -30,15 +30,17 @@
 			{/if}
 		</ul>
 
+		{* parse out all tags *}
+		{def $configured_tag_fields = array()}
 		{foreach $tags as $tag_id => $tag_name}
 			<div id="tabs-{$tag_id|wash()}">
-
 				{if $fieldgroups|count()}
 					{foreach $fieldgroups as $name => $fieldgroup}
 						<fieldset>
 							<legend>{$name|wash()}:</legend>
 
 							{set $field_ids = $fieldgroup|explode( ',' )}
+							{set $configured_tag_fields = array()}
 							
 							{if $field_ids|count()}
 								<table>
@@ -49,7 +51,25 @@
 												{if is_set( $content[ $tag_id ][ $field_id ] )}{$content[ $tag_id ][ $field_id ]|wash()}{/if}
 											</td>
 										</tr>
+										{* ezp is so bad handling hashes - we need to keep track of shown fields in
+										   an extra variable and fileter by that.
+										*}
+										{set $configured_tag_fields = $configured_tag_fields|append( $field_id )}
 									{/foreach}
+									
+									{* show unconfigured fields *}
+									{if ezini( 'MugoViewExtras', 'ShowUnkownFields', 'mugo_view_extras.ini' )|eq( 'enabled' )}
+										{foreach $content[ $tag_id ] as $field_id => $value}
+											{if $configured_tag_fields|contains( $field_id )|not()}
+												<tr class="unconfigured ui-state-error">
+													<td>{$field_id|wash()}:</td>
+													<td>
+														{$value|wash()}
+													</td>
+												</tr>
+											{/if}
+										{/foreach}
+									{/if}
 								</table>
 							{/if}
 						</fieldset>
@@ -58,6 +78,7 @@
 			</div>
 		{/foreach}
 		
+		{* parse out current configuration *}
 		{if $view_extras}
 			<div id="tabs-current-config">
 				{if $fieldgroups|count()}
@@ -84,10 +105,15 @@
 												
 												<td>{$fields[ $field_id ]|wash()}</td>
 												<td>{$view_extras[ $field_id ]}</td>
-												<td>{$view_extra_loop.class_identifier}</td>
-												<td>
-													<a href={concat( 'content/view/full/', $view_extras[ $field_id ])|ezurl()}>{$view_extra_loop.name|wash()}</a>
-												</td>
+												{if is_set( $view_extra_loop )}
+													<td>{$view_extra_loop.class_identifier}</td>
+													<td>
+														<a href={concat( 'content/view/full/', $view_extras[ $field_id ])|ezurl()}>{$view_extra_loop.name|wash()}</a>
+													</td>
+												{else}
+													<td></td>
+													<td></td>
+												{/if}
 											{else}
 												<td>{$view_extras[ $field_id ]|wash()}</td>
 											{/if}
