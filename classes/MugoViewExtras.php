@@ -1,8 +1,7 @@
 <?php
-
-/**
+/*
+ * make get_view_extras a static method and fix $this references
  * @author pek
- *
  */
 class MugoViewExtras
 {
@@ -147,7 +146,7 @@ class MugoViewExtras
 			
 			$return[] = $step_data;
 		}
-
+		
 		// Add the tag "standard" to root element
 		if( !in_array( 'standard', $return[ 0 ][ 'tags' ] ) )
 		{

@@ -147,6 +147,11 @@ class MugoViewExtrasType extends eZDataType
 	{
 		return $contentObjectAttribute->attribute( 'data_text' ) !== null;
 	}
+	
+	function isIndexable()
+	{
+		return true;
+	}
 }
 
 eZDataType::register( MugoViewExtrasType::DATA_TYPE_STRING, 'MugoViewExtrasType' );
