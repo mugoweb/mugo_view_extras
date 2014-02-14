@@ -29,6 +29,6 @@ But before you need to set the default view_extra array:
                                                             'set_default', true()
                                                           ) )}
 
-This is usefull if you have template not in context of a node_id and you use another template in the same
+This is useful if you have template not in context of a node_id and you use another template in the same
 request which sets the default view_extra array.
 

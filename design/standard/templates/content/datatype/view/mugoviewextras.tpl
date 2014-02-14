@@ -26,7 +26,7 @@
 				</li>
 			{/foreach}
 			{if $view_extras}
-				<li><a href="#tabs-current-config}">Node Values</a></li>
+				<li><a href="#tabs-current-config">Node Values</a></li>
 			{/if}
 		</ul>
 
