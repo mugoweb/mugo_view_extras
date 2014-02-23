@@ -72,12 +72,35 @@ class MugoViewExtrasType extends eZDataType
                 $module = $parameters['module'];
                 $redirectionURI = $parameters['current-redirection-uri'];
 
+                $mugoViewExtrasINI = eZINI::instance( 'mugo_view_extras.ini' );
+
                 $browseParameters = array( 'action_name' => 'AddRelatedNodeViewExtras',
                                            'browse_custom_action' => array( 'name' => 'CustomActionButton[' . $contentObjectAttribute->attribute( 'id' ) . '_set_related_node]',
                                                                             'value' => $tagID . '|' . $fieldID ),
                                            // If we don't set this, we will lose the attribute content when we return from browse mode
                                            'persistent_data' => array( 'HasObjectInput' => 0 ),
                                            'from_page' => $redirectionURI );
+
+                // Add browse mode start node if configured in the INI file
+                if( $mugoViewExtrasINI->hasVariable( $fieldID . '_' . $tagID . '_field_settings', 'BrowseModeStartNode' ) )
+                {
+                    $browseParameters['start_node'] = $mugoViewExtrasINI->variable( $fieldID . '_' . $tagID . '_field_settings', 'BrowseModeStartNode' );
+                }
+                elseif( $mugoViewExtrasINI->hasVariable( $fieldID . '_default_field_settings', 'BrowseModeStartNode' ) )
+                {
+                    $browseParameters['start_node'] = $mugoViewExtrasINI->variable( $fieldID . '_default_field_settings', 'BrowseModeStartNode' );
+                }
+
+                // Limit the content classes that can be selected if configured in the INI file
+                if( $mugoViewExtrasINI->hasVariable( $fieldID . '_' . $tagID . '_field_settings', 'BrowseModeAllowedClasses' ) )
+                {
+                    $browseParameters['class_array'] = $mugoViewExtrasINI->variable( $fieldID . '_' . $tagID . '_field_settings', 'BrowseModeAllowedClasses' );
+                }
+                elseif( $mugoViewExtrasINI->hasVariable( $fieldID . '_default_field_settings', 'BrowseModeAllowedClasses' ) )
+                {
+                    $browseParameters['class_array'] = $mugoViewExtrasINI->variable( $fieldID . '_default_field_settings', 'BrowseModeAllowedClasses' );
+                }
+
                 eZContentBrowse::browse( $browseParameters,
                                          $module );
             } break;
