@@ -33,5 +33,3 @@ class ezfSolrDocumentFieldMugoViewExtras extends ezfSolrDocumentFieldBase
 		return array( 'attr_view_extras____ms' => array_unique( $values ) );
 	}
 }
-
-?>

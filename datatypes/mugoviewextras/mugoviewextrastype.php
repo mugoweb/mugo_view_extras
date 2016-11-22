@@ -133,6 +133,35 @@ class MugoViewExtrasType extends eZDataType
                     }
                 }
             }
+
+			case 'add_tag':
+			{
+				if( $_REQUEST[ 'newtagname' ] )
+				{
+					$content = $contentObjectAttribute->attribute( 'content' );
+
+					$content[ $_REQUEST[ 'newtagname' ] ] = array();
+
+					$contentObjectAttribute->setContent( $content );
+					$contentObjectAttribute->store();
+				}
+			}
+			break;
+
+			case 'remove_tag':
+			{
+				if( $_REQUEST[ 'currenttag' ] )
+				{
+					$content = $contentObjectAttribute->attribute( 'content' );
+
+					unset( $content[ $_REQUEST[ 'currenttag' ] ] );
+
+					$contentObjectAttribute->setContent( $content );
+					$contentObjectAttribute->store();
+				}
+			}
+			break;
+
             default:
             {
                 eZDebug::writeError( "Unknown custom HTTP action: " . $action, "eZObjectRelationType" );
@@ -170,7 +199,28 @@ class MugoViewExtrasType extends eZDataType
 	{
 		return $contentObjectAttribute->attribute( 'data_text' ) !== null;
 	}
-	
+
+	/**
+	 * @param eZContentObjectAttribute $contentObjectAttribute
+	 * @return bool
+	 */
+	function storeObjectAttribute( $contentObjectAttribute )
+	{
+		$contentObjectAttribute->setAttribute( 'data_text', serialize( $contentObjectAttribute->content() ) );
+		return true;
+	}
+
+	/**
+	 * @param $http
+	 * @param $base
+	 * @param $classAttribute
+	 * @return int
+	 */
+	function validateClassAttributeHTTPInput( $http, $base, $classAttribute )
+	{
+		return eZInputValidator::STATE_ACCEPTED;
+	}
+
 	function isIndexable()
 	{
 		return true;
@@ -178,4 +228,3 @@ class MugoViewExtrasType extends eZDataType
 }
 
 eZDataType::register( MugoViewExtrasType::DATA_TYPE_STRING, 'MugoViewExtrasType' );
-?>

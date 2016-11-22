@@ -3,6 +3,11 @@
 	font-style: italic;
 }
 
+.ui-view-extras fieldset table td
+{
+	margin: 3px 10px;
+}
+
 .ui-view-extras table td
 {
 	padding: 0px 7px;
@@ -12,4 +17,16 @@
 {
 	font-style: italic;
 	padding-bottom: 7px;
+}
+
+.ui-view-extras #tabs-tags > div
+{
+	display: none;
+}
+
+#view-extras-current-config ol li
+{
+	float: left;
+	list-style: none;
+	margin-right: 10px;
 }

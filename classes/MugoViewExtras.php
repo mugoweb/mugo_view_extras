@@ -6,6 +6,8 @@
 class MugoViewExtras
 {
 	/**
+	 * Caching wrapper to the function 'build_view_extras'
+	 *
 	 * @param int $node_id
 	 * @param boolean $set_default
 	 * @param string $set
