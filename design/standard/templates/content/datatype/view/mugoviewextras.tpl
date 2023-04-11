@@ -1,6 +1,4 @@
-{ezscript_require( 'ezjsc::jquery' )} 
-{ezscript_require( 'ezjsc::jqueryUI' )} 
-{ezcss_require( 'ui-lightness/jquery-ui-1.8.11.custom.css' )} 
+{ezscript_require( 'ezjsc::jquery' )}
 {ezcss_require( 'view_extras.css' )}
 
 {if is_unset( $attribute_base )}

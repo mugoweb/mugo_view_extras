@@ -1,1 +1,1 @@
-<!-- Missing override for '{$node.class_identifier}' and view 'extra'. -->
+<!-- Missing override for class '{$node.class_identifier}' and view 'extra'. -->

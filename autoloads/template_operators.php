@@ -48,8 +48,8 @@ class MugoViewExtrasTemplateOperators
 				$view_extras = $view_extras_obj->get_view_extras( $namedParameters[ 'context_node_id' ] );
 
 				// search and replaces all includes
-				preg_match_all( '#<include(?: ttl="(?P<ttl>.*?)"|) id="(?P<id>.*?)"\/>#', $operatorValue, $includes );
-				
+				preg_match_all( '#<include(?: ttl="(?P<ttl>.*?)"|) id="(?P<id>.*?)"(/>|></include>)#', $operatorValue, $includes );
+
 				if( !empty( $includes[0] ) )
 				{
 					foreach( $includes[0] as $index => $include )

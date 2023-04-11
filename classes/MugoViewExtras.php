@@ -13,7 +13,7 @@ class MugoViewExtras
 	 * @param string $set
 	 * @return multitype:
 	 */
-	public function get_view_extras( $node_id = null, $set_default = false, $set = 'standard' )
+	public function get_view_extras( $node_id = null, $set_default = false )
 	{
 		if( $node_id )
 		{
@@ -24,7 +24,7 @@ class MugoViewExtras
 			
 				if( $node instanceof eZContentObjectTreeNode )
 				{
-					$GLOBALS[ 'mugo' ][ 'extra_views' ][ 'cache' ][ $node_id ] = $this->build_view_extras( $node, $set );
+					$GLOBALS[ 'mugo' ][ 'extra_views' ][ 'cache' ][ $node_id ] = $this->build_view_extras( $node );
 				}
 				else
 				{
@@ -53,21 +53,45 @@ class MugoViewExtras
 			}
 		}
 	}
-	
-	private function build_view_extras( $node, $set = 'standard' )
+
+	/**
+	 *
+	 * @param integer $node_id
+	 * @return array
+	 */
+	public function get_node_tags( $node_id )
 	{
 		$return = array();
-		
-		// in case NULL or empty string was provided
-		$set = $set ? $set : 'standard';
 
-		$ini     = eZINI::instance( 'mugo_view_extras.ini' );
-		$tags    = $ini->variable( 'Set-'. $set, 'Tags' );
-		
+		$node = eZContentObjectTreeNode::fetch( $node_id );
+
+		if( $node instanceof eZContentObjectTreeNode )
+		{
+			$return = $this->get_view_extra_node_tags( $this->build_data_structure( $node ) );
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Builds a data array containing all view_extras and attribute tags per element in the
+	 * node path. Then it extracts all tags in the node path.
+	 * Looping of the node path tags and the node path itself to calculate a single sheet
+	 * of view_extra config values.
+	 *
+	 * @param type $node
+	 * @return type
+	 */
+	private function build_view_extras( $node )
+	{
+		$return = array();
+
 		// build data struture
 		$data = $this->build_data_structure( $node );
 		
-		//Reads all view_extra tags for the current path (data structure)
+		// Reads all view_extra tags for the current path (data structure)
+		// So node tags are all tags on the node plus the tags configured
+		// on the node path
 		$node_tags = $this->get_view_extra_node_tags( $data );
 		
 		if( !empty( $tags ) )
